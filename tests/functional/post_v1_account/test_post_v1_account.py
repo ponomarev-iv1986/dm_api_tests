@@ -29,8 +29,9 @@ def test_post_v1_account():
     login_api = LoginApi("http://5.63.153.31:5051")
     mailhog_api = MailhogApi("http://5.63.153.31:5025")
 
-    login = "iponomarev_12"
+    login = "iponomarev_14"
     email = f"{login}@mail.ru"
+    new_email = f"{login}_new@mail.ru"
     password = "qwerty"
 
     # Регистрация пользователя
@@ -46,7 +47,7 @@ def test_post_v1_account():
 
     # Получить письма из почтового сервера
 
-    response = mailhog_api.get_api_v2_messages(response)
+    response = mailhog_api.get_api_v2_messages()
     assert response.status_code == 200
 
     # Получить активационный токен
@@ -59,13 +60,54 @@ def test_post_v1_account():
     response = account_api.put_v1_account_token(token)
     assert response.status_code == 200
 
-    # Авторизоваться
+    # Авторизуемся
 
     json_data = {
         "login": login,
         "password": password,
         "rememberMe": True,
     }
+
+    response = login_api.post_v1_account_login(json_data)
+    assert response.status_code == 200
+
+    # Меняем email
+
+    json_data = {
+        "login": login,
+        "password": password,
+        "email": new_email,
+    }
+
+    response = account_api.put_v1_account_email(json_data)
+    assert response.status_code == 200
+
+    # Пробуем авторизоваться
+
+    json_data = {
+        "login": login,
+        "password": password,
+        "rememberMe": True,
+    }
+
+    response = login_api.post_v1_account_login(json_data)
+    assert response.status_code == 403
+
+    # Получить письма из почтового сервера
+
+    response = mailhog_api.get_api_v2_messages()
+    assert response.status_code == 200
+
+    # Получаем токен по email
+
+    token = get_activation_token_by_email(new_email, response)
+
+    # Активация пользователя
+
+    response = account_api.put_v1_account_token(token)
+    assert response.status_code == 200
+
+    # Авторизуемся
 
     response = login_api.post_v1_account_login(json_data)
     assert response.status_code == 200
@@ -78,5 +120,18 @@ def get_activation_token_by_login(login, response):
         user_login = user_data["Login"]
         if user_login == login:
             token = user_data.get("ConfirmationLinkUrl").split("/")[-1]
+            break
+    return token
+
+
+def get_activation_token_by_email(email, response):
+    token = None
+    for item in response.json()["items"]:
+        if item["Content"]["Headers"]["To"][0] == email:
+            token = (
+                json.loads(item["Content"]["Body"])
+                .get("ConfirmationLinkUrl")
+                .split("/")[-1]
+            )
             break
     return token
