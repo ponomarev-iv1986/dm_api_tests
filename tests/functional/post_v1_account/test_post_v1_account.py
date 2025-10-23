@@ -29,7 +29,7 @@ def test_post_v1_account():
     login_api = LoginApi("http://5.63.153.31:5051")
     mailhog_api = MailhogApi("http://5.63.153.31:5025")
 
-    login = "iponomarev_14"
+    login = "iponomarev_16"
     email = f"{login}@mail.ru"
     new_email = f"{login}_new@mail.ru"
     password = "qwerty"
@@ -101,6 +101,7 @@ def test_post_v1_account():
     # Получаем токен по email
 
     token = get_activation_token_by_email(new_email, response)
+    assert token is not None
 
     # Активация пользователя
 
