@@ -29,7 +29,7 @@ def test_post_v1_account():
     login_api = LoginApi("http://5.63.153.31:5051")
     mailhog_api = MailhogApi("http://5.63.153.31:5025")
 
-    login = "iponomarev_16"
+    login = "iponomarev_17"
     email = f"{login}@mail.ru"
     new_email = f"{login}_new@mail.ru"
     password = "qwerty"
