@@ -1,3 +1,5 @@
+import datetime
+
 from api_mailhog.apis.mailhog_api import MailhogApi
 from dm_api_account.apis.account_api import AccountApi
 from utils import utils
@@ -7,7 +9,8 @@ def test_put_v1_account_token():
     account_api = AccountApi("http://5.63.153.31:5051")
     mailhog_api = MailhogApi("http://5.63.153.31:5025")
 
-    login = "iponomarev_29"
+    timestamp = str(datetime.datetime.now().timestamp())[:-4]
+    login = f"iponomarev_{timestamp}"
     email = f"{login}@mail.ru"
     password = "qwerty"
 

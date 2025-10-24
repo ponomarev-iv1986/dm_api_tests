@@ -1,6 +1,6 @@
 name: DM API Tests
 
-on: [ push ]
+on: [ push, pull_request ]
 
 jobs:
   test:
