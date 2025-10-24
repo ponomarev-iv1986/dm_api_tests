@@ -9,7 +9,7 @@ def test_post_v1_account_login():
     login_api = LoginApi("http://5.63.153.31:5051")
     mailhog_api = MailhogApi("http://5.63.153.31:5025")
 
-    login = "iponomarev_23"
+    login = "iponomarev_27"
     email = f"{login}@mail.ru"
     password = "qwerty"
 

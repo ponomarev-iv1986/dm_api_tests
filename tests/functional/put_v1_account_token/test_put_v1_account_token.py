@@ -7,7 +7,7 @@ def test_put_v1_account_token():
     account_api = AccountApi("http://5.63.153.31:5051")
     mailhog_api = MailhogApi("http://5.63.153.31:5025")
 
-    login = "iponomarev_25"
+    login = "iponomarev_29"
     email = f"{login}@mail.ru"
     password = "qwerty"
 
