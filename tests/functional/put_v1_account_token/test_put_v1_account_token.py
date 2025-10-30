@@ -2,7 +2,7 @@ import datetime
 
 import structlog
 
-from helpers.api_helper import ApiHelper
+from helpers.api_helper import AccountHelper
 from restclient.configuration import Configuration
 from services.api_mailhog_service import ApiMailhogService
 from services.dm_api_account_service import DmApiAccountService
@@ -22,15 +22,12 @@ def test_put_v1_account_token():
         configuration=Configuration("http://5.63.153.31:5025", disable_log=True)
     )
 
-    api_helper = ApiHelper(account, mailhog)
+    api_helper = AccountHelper(account, mailhog)
 
     timestamp = str(datetime.datetime.now().timestamp())[:-4]
     login = f"iponomarev_{timestamp}"
     email = f"{login}@mail.ru"
     password = "qwerty"
 
-    # Регистрация пользователя
-    api_helper.register_user(login, email, password)
-
-    # Активация токена
-    api_helper.activate_token_by_login(login)
+    # Регистрация и активация пользователя
+    api_helper.register_and_activate_user(login, email, password)

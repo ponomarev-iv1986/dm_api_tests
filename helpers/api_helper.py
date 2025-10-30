@@ -4,7 +4,7 @@ from services.api_mailhog_service import ApiMailhogService
 from services.dm_api_account_service import DmApiAccountService
 
 
-class ApiHelper:
+class AccountHelper:
     def __init__(self, account: DmApiAccountService, mailhog: ApiMailhogService):
         self.account = account
         self.mailhog = mailhog
@@ -16,7 +16,7 @@ class ApiHelper:
             user_data = json.loads(item["Content"]["Body"])
             user_login = user_data["Login"]
             if user_login == login:
-                token = user_data.get("ConfirmationLinkUrl").split("/")[-1]
+                token = user_data["ConfirmationLinkUrl"].split("/")[-1]
                 break
         return token
 
@@ -25,11 +25,9 @@ class ApiHelper:
         token = None
         for item in response.json()["items"]:
             if item["Content"]["Headers"]["To"][0] == email:
-                token = (
-                    json.loads(item["Content"]["Body"])
-                    .get("ConfirmationLinkUrl")
-                    .split("/")[-1]
-                )
+                token = json.loads(item["Content"]["Body"])[
+                    "ConfirmationLinkUrl"
+                ].split("/")[-1]
                 break
         return token
 
@@ -37,7 +35,7 @@ class ApiHelper:
         response = self.mailhog.mailhog_api.get_api_v2_messages()
         return response
 
-    def register_user(self, login, email, password):
+    def register_and_activate_user(self, login, email, password):
         json_data = {
             "login": login,
             "email": email,
@@ -46,6 +44,7 @@ class ApiHelper:
 
         response = self.account.account_api.post_v1_account(json_data)
         assert response.status_code == 201, "Не удалось зарегистрировать пользователя"
+        self.activate_token_by_login(login)
 
     def activate_token_by_login(self, login):
         response = self._get_emails()
@@ -79,17 +78,7 @@ class ApiHelper:
         }
 
         response = self.account.login_api.post_v1_account_login(json_data)
-        assert response.status_code == 200, "Не удалось залогиниться пользователю"
-
-    def failed_login_user(self, login, password, remember_me=True):
-        json_data = {
-            "login": login,
-            "password": password,
-            "rememberMe": remember_me,
-        }
-
-        response = self.account.login_api.post_v1_account_login(json_data)
-        assert response.status_code == 403, "Пользователь не должен был залогиниться"
+        return response
 
     def change_user_email(self, login, password, new_email):
         json_data = {
