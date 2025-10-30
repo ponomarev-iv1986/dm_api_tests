@@ -2,7 +2,7 @@ import datetime
 
 import structlog
 
-from helpers.api_helper import AccountHelper
+from helpers.account_helper import AccountHelper
 from restclient.configuration import Configuration
 from services.api_mailhog_service import ApiMailhogService
 from services.dm_api_account_service import DmApiAccountService
