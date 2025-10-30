@@ -1,7 +1,26 @@
 import json
+import time
 
 from services.api_mailhog_service import ApiMailhogService
 from services.dm_api_account_service import DmApiAccountService
+
+
+def retryer(timeout=5):
+    def decorator(func):
+        def wrapper(*args, **kwargs):
+            now = time.monotonic()
+            while True:
+                try:
+                    func(*args, **kwargs)
+                    break
+                except AssertionError:
+                    print(f"Неудачная попытка выполнения функции {func.__name__}")
+                    if time.monotonic() - now < timeout:
+                        time.sleep(1)
+                        continue
+                    raise
+        return wrapper
+    return decorator
 
 
 class AccountHelper:
@@ -46,6 +65,7 @@ class AccountHelper:
         assert response.status_code == 201, "Не удалось зарегистрировать пользователя"
         self.activate_token_by_login(login)
 
+    @retryer()
     def activate_token_by_login(self, login):
         response = self._get_emails()
         assert (
