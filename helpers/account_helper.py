@@ -5,7 +5,7 @@ from services.api_mailhog_service import ApiMailhogService
 from services.dm_api_account_service import DmApiAccountService
 
 
-def retryer(timeout=5):
+def retryer(f=None, *, timeout=5):
     def decorator(func):
         def wrapper(*args, **kwargs):
             now = time.monotonic()
@@ -14,13 +14,21 @@ def retryer(timeout=5):
                     func(*args, **kwargs)
                     break
                 except AssertionError:
-                    print(f"Неудачная попытка выполнения функции {func.__name__}")
+                    print(
+                        f"\033[31mНеудачная попытка выполнения функции "
+                        f"{func.__name__}\033[0m"
+                    )
                     if time.monotonic() - now < timeout:
                         time.sleep(1)
                         continue
                     raise
+
         return wrapper
-    return decorator
+
+    if f is None:
+        return decorator
+    else:
+        return decorator(f)
 
 
 class AccountHelper:
@@ -54,6 +62,7 @@ class AccountHelper:
         response = self.mailhog.mailhog_api.get_api_v2_messages()
         return response
 
+    @retryer
     def register_and_activate_user(self, login, email, password):
         json_data = {
             "login": login,
@@ -65,7 +74,7 @@ class AccountHelper:
         assert response.status_code == 201, "Не удалось зарегистрировать пользователя"
         self.activate_token_by_login(login)
 
-    @retryer()
+    @retryer
     def activate_token_by_login(self, login):
         response = self._get_emails()
         assert (
@@ -78,6 +87,7 @@ class AccountHelper:
         response = self.account.account_api.put_v1_account_token(token)
         assert response.status_code == 200, "Не удалось активировать токен"
 
+    @retryer
     def activate_token_by_email(self, email):
         response = self._get_emails()
         assert (
@@ -100,6 +110,7 @@ class AccountHelper:
         response = self.account.login_api.post_v1_account_login(json_data)
         return response
 
+    @retryer
     def change_user_email(self, login, password, new_email):
         json_data = {
             "login": login,
