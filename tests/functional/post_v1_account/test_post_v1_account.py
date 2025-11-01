@@ -2,8 +2,10 @@ import datetime
 
 import structlog
 
-from dm_api_account.apis.account_api import AccountApi
+from helpers.account_helper import AccountHelper
 from restclient.configuration import Configuration
+from services.api_mailhog_service import ApiMailhogService
+from services.dm_api_account_service import DmApiAccountService
 
 structlog.configure(
     processors=[
@@ -13,19 +15,19 @@ structlog.configure(
 
 
 def test_post_v1_account():
-    account_api = AccountApi(configuration=Configuration("http://5.63.153.31:5051"))
+    account = DmApiAccountService(
+        configuration=Configuration("http://5.63.153.31:5051")
+    )
+    mailhog = ApiMailhogService(
+        configuration=Configuration("http://5.63.153.31:5025", disable_log=True)
+    )
+
+    api_helper = AccountHelper(account, mailhog)
 
     timestamp = str(datetime.datetime.now().timestamp())[:-4]
     login = f"iponomarev_{timestamp}"
     email = f"{login}@mail.ru"
     password = "qwerty"
 
-    # Регистрация пользователя
-    json_data = {
-        "login": login,
-        "email": email,
-        "password": password,
-    }
-
-    response = account_api.post_v1_account(json_data)
-    assert response.status_code == 201
+    # Регистрация и активация пользователя
+    api_helper.register_and_activate_user(login, email, password)
