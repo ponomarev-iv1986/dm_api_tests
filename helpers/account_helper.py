@@ -71,7 +71,7 @@ class AccountHelper:
         }
 
         response = self.account.account_api.post_v1_account(json_data)
-        assert response.status_code == 200, "Не удалось зарегистрировать пользователя"
+        assert response.status_code == 201, "Не удалось зарегистрировать пользователя"
         self.activate_token_by_login(login)
 
     @retryer
