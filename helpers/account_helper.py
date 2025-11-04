@@ -38,6 +38,7 @@ class AccountHelper:
     def __init__(self, account: DmApiAccountService, mailhog: ApiMailhogService):
         self.account = account
         self.mailhog = mailhog
+        self._auth_user = None
 
     @get_token_retryer
     def _get_activation_token_by_login(self, login):
@@ -74,6 +75,18 @@ class AccountHelper:
                 token = user_data["ConfirmationLinkUri"].split("/")[-1]
                 break
         return token
+
+    def get_auth_user(self):
+        return self._auth_user
+
+    def auth_client(self, user):
+        response = self.login_user(user.login, user.password)
+        assert response.status_code == 200, "Не удалось залогиниться пользователю"
+
+        token = {"X-Dm-Auth-Token": response.headers["X-Dm-Auth-Token"]}
+        self.account.account_api.update_headers(token)
+        self.account.login_api.update_headers(token)
+        self._auth_user = user
 
     def register_and_activate_user(self, login, email, password):
         registration = Registration(

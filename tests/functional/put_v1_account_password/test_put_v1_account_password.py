@@ -1,6 +1,5 @@
-def test_put_v1_account_password(auth_account_helper_and_auth_user):
-    auth_account_helper = auth_account_helper_and_auth_user[0]
-    auth_user = auth_account_helper_and_auth_user[1]
+def test_put_v1_account_password(auth_account_helper):
+    auth_user = auth_account_helper.get_auth_user()
     login = auth_user.login
     email = auth_user.email
     password = auth_user.password
