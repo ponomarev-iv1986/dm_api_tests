@@ -58,6 +58,18 @@ class AccountHelper:
                 break
         return token
 
+    @get_token_retryer
+    def _get_change_password_token_by_login(self, login):
+        response = self.mailhog.mailhog_api.get_api_v2_messages()
+        token = None
+        for item in response.json()["items"]:
+            user_data = json.loads(item["Content"]["Body"])
+            user_login = user_data["Login"]
+            if user_login == login:
+                token = user_data["ConfirmationLinkUri"].split("/")[-1]
+                break
+        return token
+
     def register_and_activate_user(self, login, email, password):
         json_data = {
             "login": login,
@@ -102,3 +114,41 @@ class AccountHelper:
 
         response = self.account.account_api.put_v1_account_email(json_data)
         assert response.status_code == 200, "Не удалось поменять email пользователя"
+
+    def get_current_user(self):
+        response = self.account.account_api.get_v1_account()
+        assert response.status_code == 200
+
+    def change_password(self, login, email, password, new_password):
+        json_data = {
+            "login": login,
+            "email": email,
+        }
+        response = self.account.account_api.post_v1_account_password(json_data)
+        assert (
+            response.status_code == 200
+        ), "Не удалось сбросить пароль зарегистрированного пользователя"
+
+        token = self._get_change_password_token_by_login(login)
+        assert token is not None, "Не удалось получить токен"
+
+        json_data = {
+            "login": login,
+            "token": token,
+            "oldPassword": password,
+            "newPassword": new_password,
+        }
+        response = self.account.account_api.put_v1_account_password(json_data)
+        assert (
+            response.status_code == 200
+        ), "Не удалось сменить пароль зарегистрированного пользователя"
+
+    def logout_user(self):
+        response = self.account.login_api.delete_v1_account_login()
+        assert response.status_code == 204, "Не удалось выйти из аккаунта"
+
+    def logout_user_from_every_device(self):
+        response = self.account.login_api.delete_v1_account_login_all()
+        assert (
+            response.status_code == 204
+        ), "Не удалось выйти из аккаунта на всех устройствах"

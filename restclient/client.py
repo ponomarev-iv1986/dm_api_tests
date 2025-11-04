@@ -53,6 +53,12 @@ class RestClient:
 
         return rest_response
 
+    def update_headers(self, headers):
+        if self.headers:
+            self.headers.update(headers)
+        else:
+            self.headers = headers
+
     def get(self, path, **kwargs):
         return self._send_request(method="GET", path=path, **kwargs)
 
