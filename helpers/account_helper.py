@@ -58,6 +58,7 @@ class AccountHelper:
                 break
         return token
 
+    @get_token_retryer
     def _get_change_password_token_by_login(self, login):
         response = self.mailhog.mailhog_api.get_api_v2_messages()
         token = None
