@@ -113,7 +113,7 @@ class AccountHelper:
         response = self.account.account_api.put_v1_account_token(token)
         assert response.status_code == 200, "Не удалось активировать токен"
 
-    def login_user(self, login, password, remember_me=True):
+    def login_user(self, login, password, remember_me=True, enable_validation=True):
         login_credentials = LoginCredentials(
             login=login,
             password=password,
@@ -121,7 +121,8 @@ class AccountHelper:
         )
 
         response = self.account.login_api.post_v1_account_login(
-            login_credentials=login_credentials
+            login_credentials=login_credentials,
+            enable_validation=enable_validation,
         )
         return response
 
