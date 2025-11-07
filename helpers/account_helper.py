@@ -141,6 +141,7 @@ class AccountHelper:
     def get_current_user(self):
         response = self.account.account_api.get_v1_account()
         assert response.status_code == 200
+        return response
 
     def change_password(self, login, email, password, new_password):
         reset_password = ResetPassword(
