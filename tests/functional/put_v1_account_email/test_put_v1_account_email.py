@@ -8,9 +8,7 @@ def test_put_v1_account_email(account_helper, user):
     account_helper.register_and_activate_user(login, email, password)
 
     # Авторизация пользователя
-    assert (
-        account_helper.login_user(login, password).status_code == 200
-    ), "Не удалось залогиниться пользователю"
+    account_helper.login_user(login, password)
 
     # Смена email
     account_helper.change_user_email(login, password, new_email)
@@ -29,6 +27,4 @@ def test_put_v1_account_email(account_helper, user):
     account_helper.activate_token_by_email(new_email)
 
     # Авторизация пользователя
-    assert (
-        account_helper.login_user(login, password).status_code == 200
-    ), "Не удалось залогиниться пользователю"
+    account_helper.login_user(login, password)

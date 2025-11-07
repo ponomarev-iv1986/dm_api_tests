@@ -1,10 +1,10 @@
 from hamcrest import (
     all_of,
     assert_that,
-    has_entries,
-    has_entry,
     has_items,
     starts_with,
+    has_property,
+    has_properties,
 )
 
 
@@ -15,52 +15,52 @@ def test_get_v1_account(auth_account_helper):
 
     # Проверяем поля тела ответа
     assert_that(
-        response.json(),
+        response,
         all_of(
-            has_entry(
+            has_property(
                 "resource",
-                has_entry(
+                has_property(
                     "login",
                     starts_with("iponomarev"),
                 ),
             ),
-            has_entry(
+            has_property(
                 "resource",
-                has_entry(
+                has_property(
                     "settings",
-                    has_entry("colorSchema", "Modern"),
+                    has_property("color_schema", "Modern"),
                 ),
             ),
-            has_entry(
+            has_property(
                 "resource",
-                has_entry(
+                has_property(
                     "settings",
-                    has_entry(
+                    has_property(
                         "paging",
-                        has_entries(
+                        has_properties(
                             {
-                                "postsPerPage": 10,
-                                "commentsPerPage": 10,
-                                "topicsPerPage": 10,
-                                "messagesPerPage": 10,
-                                "entitiesPerPage": 10,
+                                "posts_per_page": 10,
+                                "comments_per_page": 10,
+                                "topics_per_page": 10,
+                                "messages_per_page": 10,
+                                "entities_per_page": 10,
                             },
                         ),
                     ),
                 ),
             ),
-            has_entry(
+            has_property(
                 "resource",
-                has_entry(
+                has_property(
                     "roles",
                     has_items("Guest", "Player"),
                 ),
             ),
-            has_entry(
+            has_property(
                 "resource",
-                has_entry(
+                has_property(
                     "rating",
-                    has_entries(
+                    has_properties(
                         {
                             "enabled": True,
                             "quality": 0,
