@@ -17,7 +17,12 @@ def test_put_v1_account_email(account_helper, user):
 
     # Попытка авторизоваться
     assert (
-        account_helper.login_user(login, password).status_code == 403
+        account_helper.login_user(
+            login,
+            password,
+            enable_validation=False,
+        ).status_code
+        == 403
     ), "Пользователь не должен был залогиниться"
 
     # Активация токена по email

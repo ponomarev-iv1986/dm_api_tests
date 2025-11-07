@@ -1,5 +1,4 @@
-def test_delete_v1_account_login(auth_account_helper_and_auth_user):
-    auth_account_helper = auth_account_helper_and_auth_user[0]
+def test_delete_v1_account_login(auth_account_helper):
 
     # Выходим из аккаунта
     auth_account_helper.logout_user()

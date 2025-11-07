@@ -43,21 +43,18 @@ def account_helper(account_service, mailhog_service):
 
 
 @pytest.fixture
-def auth_account_helper_and_auth_user(user, mailhog_service):
+def auth_account_helper(user, mailhog_service):
     account_service = DmApiAccountService(
         configuration=Configuration("http://5.63.153.31:5051")
     )
-    auth_account_helper = AccountHelper(account_service, mailhog_service)
-    auth_account_helper.register_and_activate_user(
+    account_helper = AccountHelper(account_service, mailhog_service)
+    account_helper.register_and_activate_user(
         user.login,
         user.email,
         user.password,
     )
-    response = auth_account_helper.login_user(user.login, user.password)
-    token = {"X-Dm-Auth-Token": response.headers["X-Dm-Auth-Token"]}
-    auth_account_helper.account.account_api.update_headers(token)
-    auth_account_helper.account.login_api.update_headers(token)
-    return auth_account_helper, user
+    account_helper.auth_client(user)
+    return account_helper
 
 
 @pytest.fixture
