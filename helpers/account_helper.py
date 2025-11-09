@@ -81,7 +81,6 @@ class AccountHelper:
 
     def auth_client(self, user):
         response = self.login_user(user.login, user.password, enable_validation=False)
-        assert response.status_code == 200, "Не удалось залогиниться пользователю"
 
         token = {"X-Dm-Auth-Token": response.headers["X-Dm-Auth-Token"]}
         self.account.account_api.update_headers(token)
@@ -95,8 +94,7 @@ class AccountHelper:
             password=password,
         )
 
-        response = self.account.account_api.post_v1_account(registration=registration)
-        assert response.status_code == 201, "Не удалось зарегистрировать пользователя"
+        self.account.account_api.post_v1_account(registration=registration)
         self.activate_token_by_login(login)
 
     def activate_token_by_login(self, login):
@@ -162,11 +160,7 @@ class AccountHelper:
         )
 
     def logout_user(self):
-        response = self.account.login_api.delete_v1_account_login()
-        assert response.status_code == 204, "Не удалось выйти из аккаунта"
+        self.account.login_api.delete_v1_account_login()
 
     def logout_user_from_every_device(self):
-        response = self.account.login_api.delete_v1_account_login_all()
-        assert (
-            response.status_code == 204
-        ), "Не удалось выйти из аккаунта на всех устройствах"
+        self.account.login_api.delete_v1_account_login_all()

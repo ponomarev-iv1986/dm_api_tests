@@ -2,9 +2,9 @@ from hamcrest import (
     all_of,
     assert_that,
     has_items,
-    starts_with,
-    has_property,
     has_properties,
+    has_property,
+    starts_with,
 )
 
 
