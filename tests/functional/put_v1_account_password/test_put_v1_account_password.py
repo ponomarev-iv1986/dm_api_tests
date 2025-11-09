@@ -9,6 +9,4 @@ def test_put_v1_account_password(auth_account_helper):
     auth_account_helper.change_password(login, email, password, new_password)
 
     # Логинимся с новым паролем
-    assert (
-        auth_account_helper.login_user(login, new_password).status_code == 200
-    ), "Не удалось залогиниться пользователю"
+    auth_account_helper.login_user(login, new_password)

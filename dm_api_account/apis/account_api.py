@@ -30,7 +30,8 @@ class AccountApi(RestClient):
         """
         response = self.get(path="/v1/account", headers=self.headers)
         if enable_validation:
-            UserDetailsEnvelope(**response.json())
+            response = UserDetailsEnvelope(**response.json())
+            return response
         return response
 
     def put_v1_account_token(self, token, enable_validation=True):
@@ -43,7 +44,8 @@ class AccountApi(RestClient):
         """
         response = self.put(path=f"/v1/account/{token}")
         if enable_validation:
-            UserEnvelope(**response.json())
+            response = UserEnvelope(**response.json())
+            return response
         return response
 
     def post_v1_account_password(
@@ -62,7 +64,8 @@ class AccountApi(RestClient):
             json=reset_password.model_dump(exclude_none=True, by_alias=True),
         )
         if enable_validation:
-            UserEnvelope(**response.json())
+            response = UserEnvelope(**response.json())
+            return response
         return response
 
     def put_v1_account_password(
@@ -81,7 +84,8 @@ class AccountApi(RestClient):
             json=change_password.model_dump(exclude_none=True, by_alias=True),
         )
         if enable_validation:
-            UserEnvelope(**response.json())
+            response = UserEnvelope(**response.json())
+            return response
         return response
 
     def put_v1_account_email(self, change_email: ChangeEmail, enable_validation=True):
@@ -97,5 +101,6 @@ class AccountApi(RestClient):
             json=change_email.model_dump(exclude_none=True, by_alias=True),
         )
         if enable_validation:
-            UserEnvelope(**response.json())
+            response = UserEnvelope(**response.json())
+            return response
         return response

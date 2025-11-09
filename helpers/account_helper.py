@@ -80,7 +80,7 @@ class AccountHelper:
         return self._auth_user
 
     def auth_client(self, user):
-        response = self.login_user(user.login, user.password)
+        response = self.login_user(user.login, user.password, enable_validation=False)
         assert response.status_code == 200, "Не удалось залогиниться пользователю"
 
         token = {"X-Dm-Auth-Token": response.headers["X-Dm-Auth-Token"]}
@@ -103,15 +103,13 @@ class AccountHelper:
         token = self._get_activation_token_by_login(login)
         assert token is not None, "Не удалось получить токен"
 
-        response = self.account.account_api.put_v1_account_token(token)
-        assert response.status_code == 200, "Не удалось активировать токен"
+        self.account.account_api.put_v1_account_token(token)
 
     def activate_token_by_email(self, email):
         token = self._get_activation_token_by_email(email)
         assert token is not None, "Не удалось получить токен"
 
-        response = self.account.account_api.put_v1_account_token(token)
-        assert response.status_code == 200, "Не удалось активировать токен"
+        self.account.account_api.put_v1_account_token(token)
 
     def login_user(self, login, password, remember_me=True, enable_validation=True):
         login_credentials = LoginCredentials(
@@ -133,14 +131,13 @@ class AccountHelper:
             email=new_email,
         )
 
-        response = self.account.account_api.put_v1_account_email(
-            change_email=change_email
-        )
-        assert response.status_code == 200, "Не удалось поменять email пользователя"
+        self.account.account_api.put_v1_account_email(change_email=change_email)
 
-    def get_current_user(self):
-        response = self.account.account_api.get_v1_account()
-        assert response.status_code == 200
+    def get_current_user(self, enable_validation=True):
+        response = self.account.account_api.get_v1_account(
+            enable_validation=enable_validation
+        )
+        return response
 
     def change_password(self, login, email, password, new_password):
         reset_password = ResetPassword(
@@ -148,12 +145,7 @@ class AccountHelper:
             email=email,
         )
 
-        response = self.account.account_api.post_v1_account_password(
-            reset_password=reset_password
-        )
-        assert (
-            response.status_code == 200
-        ), "Не удалось сбросить пароль зарегистрированного пользователя"
+        self.account.account_api.post_v1_account_password(reset_password=reset_password)
 
         token = self._get_change_password_token_by_login(login)
         assert token is not None, "Не удалось получить токен"
@@ -165,12 +157,9 @@ class AccountHelper:
             new_password=new_password,
         )
 
-        response = self.account.account_api.put_v1_account_password(
+        self.account.account_api.put_v1_account_password(
             change_password=change_password
         )
-        assert (
-            response.status_code == 200
-        ), "Не удалось сменить пароль зарегистрированного пользователя"
 
     def logout_user(self):
         response = self.account.login_api.delete_v1_account_login()

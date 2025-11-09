@@ -15,6 +15,7 @@ pluggy==1.6.0
 pydantic==2.12.3
 pydantic_core==2.41.4
 Pygments==2.19.2
+PyHamcrest==2.1.0
 pytest==8.4.2
 pytokens==0.2.0
 requests==2.32.5
