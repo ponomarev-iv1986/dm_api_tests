@@ -41,38 +41,19 @@ class AccountHelper:
         self._auth_user = None
 
     @get_token_retryer
-    def _get_activation_token_by_login(self, login):
+    def _get_activation_token_by_login(
+        self,
+        login,
+        change_password=False,
+    ):
         response = self.mailhog.mailhog_api.get_api_v2_messages()
         token = None
+        key = "ConfirmationLinkUri" if change_password else "ConfirmationLinkUrl"
         for item in response.json()["items"]:
             user_data = json.loads(item["Content"]["Body"])
             user_login = user_data["Login"]
             if user_login == login:
-                token = user_data["ConfirmationLinkUrl"].split("/")[-1]
-                break
-        return token
-
-    @get_token_retryer
-    def _get_activation_token_by_email(self, email):
-        response = self.mailhog.mailhog_api.get_api_v2_messages()
-        token = None
-        for item in response.json()["items"]:
-            if item["Content"]["Headers"]["To"][0] == email:
-                token = json.loads(item["Content"]["Body"])[
-                    "ConfirmationLinkUrl"
-                ].split("/")[-1]
-                break
-        return token
-
-    @get_token_retryer
-    def _get_change_password_token_by_login(self, login):
-        response = self.mailhog.mailhog_api.get_api_v2_messages()
-        token = None
-        for item in response.json()["items"]:
-            user_data = json.loads(item["Content"]["Body"])
-            user_login = user_data["Login"]
-            if user_login == login:
-                token = user_data["ConfirmationLinkUri"].split("/")[-1]
+                token = user_data[key].split("/")[-1]
                 break
         return token
 
@@ -102,10 +83,6 @@ class AccountHelper:
         assert token is not None, "Не удалось получить токен"
 
         self.account.account_api.put_v1_account_token(token)
-
-    def activate_token_by_email(self, email):
-        token = self._get_activation_token_by_email(email)
-        assert token is not None, "Не удалось получить токен"
 
         self.account.account_api.put_v1_account_token(token)
 
@@ -145,7 +122,7 @@ class AccountHelper:
 
         self.account.account_api.post_v1_account_password(reset_password=reset_password)
 
-        token = self._get_change_password_token_by_login(login)
+        token = self._get_activation_token_by_login(login, change_password=True)
         assert token is not None, "Не удалось получить токен"
 
         change_password = ChangePassword(

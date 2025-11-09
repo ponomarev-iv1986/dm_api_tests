@@ -24,7 +24,7 @@ def test_put_v1_account_email(account_helper, user):
         account_helper.login_user(login, password, enable_validation=False)
 
     # Активация токена по email
-    account_helper.activate_token_by_email(new_email)
+    account_helper.activate_token_by_login(login)
 
     # Авторизация пользователя
     account_helper.login_user(login, password)
