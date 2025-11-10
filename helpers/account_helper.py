@@ -84,8 +84,6 @@ class AccountHelper:
 
         self.account.account_api.put_v1_account_token(token)
 
-        self.account.account_api.put_v1_account_token(token)
-
     def login_user(self, login, password, remember_me=True, enable_validation=True):
         login_credentials = LoginCredentials(
             login=login,
