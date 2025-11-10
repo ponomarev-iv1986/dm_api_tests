@@ -11,7 +11,7 @@ from hamcrest import (
 class GetV1Account:
 
     @classmethod
-    def check_response_values(cls, response):
+    def check_response_values(cls, response, user_starts_with):
         assert_that(
             response,
             all_of(
@@ -19,7 +19,7 @@ class GetV1Account:
                     "resource",
                     has_property(
                         "login",
-                        starts_with("iponomarev"),
+                        starts_with(user_starts_with),
                     ),
                 ),
                 has_property(

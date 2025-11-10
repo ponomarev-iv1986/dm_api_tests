@@ -7,4 +7,4 @@ def test_get_v1_account(auth_account_helper):
     response = auth_account_helper.get_current_user()
 
     # Проверяем поля тела ответа
-    GetV1Account.check_response_values(response)
+    GetV1Account.check_response_values(response, "iponomarev")
