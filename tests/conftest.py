@@ -89,7 +89,7 @@ def user():
     login = f"{v.get("user.login")}_{timestamp}"
     email = f"{login}@mail.ru"
     new_email = f"{login}_new@mail.ru"
-    password = p
+    password =  v.get("user.password")
     new_password = f"new_{p}"
     User = namedtuple(
         "User",
