@@ -85,7 +85,6 @@ def auth_account_helper(user, mailhog_service):
 
 @pytest.fixture
 def user():
-    l = v.get("user.login")
     p = v.get("user.password")
     timestamp = str(datetime.datetime.now().timestamp())[:-4]
     login = f"{l}_{timestamp}"
