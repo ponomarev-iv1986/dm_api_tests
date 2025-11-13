@@ -90,7 +90,7 @@ def user():
     email = f"{login}@mail.ru"
     new_email = f"{login}_new@mail.ru"
     password =  v.get("user.password")
-    new_password = f"new_{p}"
+    new_password = f"new_{password}"
     User = namedtuple(
         "User",
         [
