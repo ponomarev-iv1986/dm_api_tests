@@ -4,6 +4,7 @@ certifi==2025.10.5
 charset-normalizer==3.4.4
 click==8.3.0
 curlify==3.0.0
+distconfig3==1.0.1
 idna==3.11
 iniconfig==2.3.0
 isort==7.0.0
@@ -18,8 +19,12 @@ Pygments==2.19.2
 PyHamcrest==2.1.0
 pytest==8.4.2
 pytokens==0.2.0
+PyYAML==6.0.3
 requests==2.32.5
 structlog==25.5.0
+toml==0.10.2
 typing-inspection==0.4.2
 typing_extensions==4.15.0
 urllib3==2.5.0
+vyper-config==1.2.1
+watchdog==6.0.0
