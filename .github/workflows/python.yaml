@@ -76,6 +76,6 @@ jobs:
 
       - name: Deploy on GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v1.2.9
 
       - run: echo "https://ponomarev-iv1986.github.io/dm_api_tests/"
