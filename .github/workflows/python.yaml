@@ -84,4 +84,5 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v4
 
-      - run: echo "https://ponomarev-iv1986.github.io/dm_api_tests/"
+      - name: Link to allure report
+        run: echo "https://ponomarev-iv1986.github.io/dm_api_tests/"
