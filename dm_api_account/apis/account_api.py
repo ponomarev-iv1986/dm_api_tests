@@ -1,3 +1,5 @@
+import allure
+
 from dm_api_account.models.requests.change_email import ChangeEmail
 from dm_api_account.models.requests.change_password import ChangePassword
 from dm_api_account.models.requests.registration import Registration
@@ -9,6 +11,7 @@ from restclient.client import RestClient
 
 class AccountApi(RestClient):
 
+    @allure.step("POST /v1/account")
     def post_v1_account(self, registration: Registration):
         """
         Register new user.
@@ -22,6 +25,7 @@ class AccountApi(RestClient):
         )
         return response
 
+    @allure.step("GET /v1/account")
     def get_v1_account(self, enable_validation=True):
         """
         Get current user.
@@ -34,6 +38,7 @@ class AccountApi(RestClient):
             return response
         return response
 
+    @allure.step("PUT /v1/account/token")
     def put_v1_account_token(self, token, enable_validation=True):
         """
         Activate registered user.
@@ -48,6 +53,7 @@ class AccountApi(RestClient):
             return response
         return response
 
+    @allure.step("POST /v1/account/password")
     def post_v1_account_password(
         self, reset_password: ResetPassword, enable_validation=True
     ):
@@ -68,6 +74,7 @@ class AccountApi(RestClient):
             return response
         return response
 
+    @allure.step("PUT /v1/account/password")
     def put_v1_account_password(
         self, change_password: ChangePassword, enable_validation=True
     ):
@@ -88,6 +95,7 @@ class AccountApi(RestClient):
             return response
         return response
 
+    @allure.step("PUT /v1/account/email")
     def put_v1_account_email(self, change_email: ChangeEmail, enable_validation=True):
         """
         Change registered user email.

@@ -5,6 +5,7 @@ import structlog
 from requests import JSONDecodeError, Session
 
 from restclient.configuration import Configuration
+from restclient.utils import allure_attach
 
 
 class RestClient:
@@ -22,6 +23,7 @@ class RestClient:
         except JSONDecodeError:
             return {}
 
+    @allure_attach
     def _send_request(self, method, path, **kwargs):
         log = self.log.bind(event_id=str(uuid.uuid4()))
         full_url = self.host + path

@@ -1,6 +1,8 @@
 import json
 import time
 
+import allure
+
 from dm_api_account.models.requests.change_email import ChangeEmail
 from dm_api_account.models.requests.change_password import ChangePassword
 from dm_api_account.models.requests.login_credentials import LoginCredentials
@@ -68,6 +70,7 @@ class AccountHelper:
         self.account.login_api.update_headers(token)
         self._auth_user = user
 
+    @allure.step("Регистрация и активация нового пользователя")
     def register_and_activate_user(self, login, email, password):
         registration = Registration(
             login=login,
@@ -78,12 +81,14 @@ class AccountHelper:
         self.account.account_api.post_v1_account(registration=registration)
         self.activate_token_by_login(login)
 
+    @allure.step("Активация токена")
     def activate_token_by_login(self, login):
         token = self._get_activation_token_by_login(login)
         assert token is not None, "Не удалось получить токен"
 
         self.account.account_api.put_v1_account_token(token)
 
+    @allure.step("Аутентификация пользователя")
     def login_user(self, login, password, remember_me=True, enable_validation=True):
         login_credentials = LoginCredentials(
             login=login,
@@ -97,6 +102,7 @@ class AccountHelper:
         )
         return response
 
+    @allure.step("Смена email пользователя")
     def change_user_email(self, login, password, new_email):
         change_email = ChangeEmail(
             login=login,
@@ -106,12 +112,14 @@ class AccountHelper:
 
         self.account.account_api.put_v1_account_email(change_email=change_email)
 
+    @allure.step("Получение информации о текущем пользователе")
     def get_current_user(self, enable_validation=True):
         response = self.account.account_api.get_v1_account(
             enable_validation=enable_validation
         )
         return response
 
+    @allure.step("Смена пароля пользователя")
     def change_password(self, login, email, password, new_password):
         reset_password = ResetPassword(
             login=login,
@@ -134,8 +142,10 @@ class AccountHelper:
             change_password=change_password
         )
 
+    @allure.step("Выход пользователя")
     def logout_user(self):
         self.account.login_api.delete_v1_account_login()
 
+    @allure.step("Выход пользователя со всех устройств")
     def logout_user_from_every_device(self):
         self.account.login_api.delete_v1_account_login_all()
