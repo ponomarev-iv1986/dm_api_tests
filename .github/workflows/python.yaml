@@ -52,6 +52,9 @@ jobs:
 
       - name: Download allure results
         uses: actions/download-artifact@v5
+        with:
+          name: allure-results
+          path: allure-results
 
       - name: Generate allure report
         run: allure generate -c allure-results -o _site
@@ -70,12 +73,15 @@ jobs:
     steps:
       - name: Download allure results
         uses: actions/download-artifact@v5
+        with:
+          name: _site
+          path: _site
 
       - name: Upload allure report
         uses: actions/upload-pages-artifact@v3
 
       - name: Deploy on GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v1.2.9
+        uses: actions/deploy-pages@v4
 
       - run: echo "https://ponomarev-iv1986.github.io/dm_api_tests/"
