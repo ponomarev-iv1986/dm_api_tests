@@ -210,5 +210,10 @@ __marimo__/
 allure-results/
 allure-report/
 
+# Swagger-coverage
+swagger-coverage-output/
+swagger-coverage-dm-api-account.html
+swagger-doc-dm-api-account.json
+
 # MacOS
 .DS_Store
