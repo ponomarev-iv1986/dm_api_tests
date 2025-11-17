@@ -209,3 +209,6 @@ __marimo__/
 # Allure
 allure-results/
 allure-report/
+
+# MacOS
+.DS_Store
