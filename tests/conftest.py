@@ -2,6 +2,7 @@ import datetime
 from collections import namedtuple
 from pathlib import Path
 
+import dotenv
 import pytest
 import structlog
 from swagger_coverage_py.reporter import CoverageReporter
@@ -28,6 +29,7 @@ def pytest_addoption(parser):
 
 @pytest.fixture(scope="session", autouse=True)
 def set_config(request):
+    dotenv.load_dotenv()
     config = Path(__file__).resolve().parents[1] / "config"
     config_name = request.config.getoption("--env")
     v.set_config_name(config_name)
@@ -35,6 +37,10 @@ def set_config(request):
     v.read_in_config()
     for option in options:
         v.set(option, request.config.getoption(f"--{option}"))
+    request.config.stash["telegram-notifier-addfields"]["environment"] = config_name
+    request.config.stash["telegram-notifier-addfields"][
+        "report"
+    ] = "https://ponomarev-iv1986.github.io/dm_api_tests/"
 
 
 @pytest.fixture(scope="session", autouse=True)
