@@ -43,6 +43,7 @@ jobs:
         continue-on-error: true
 
       - name: Run coverage
+        if: ${{ always() }}
         run: |
           python -m telegram_notifier.bot
 
