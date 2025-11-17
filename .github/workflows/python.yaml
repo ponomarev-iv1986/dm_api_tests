@@ -36,8 +36,9 @@ jobs:
       - name: Run tests
         run: |
           export JAVA_HOME=$JAVA_HOME
-          export TELEGRAM_BOT_CHAT_ID=${{ secrets.TELEGRAM_BOT_CHAT_ID }}
-          export TELEGRAM_BOT_ACCESS_TOKEN=${{ secrets.TELEGRAM_BOT_ACCESS_TOKEN }}
+          touch .env
+          echo TELEGRAM_BOT_CHAT_ID=${{ secrets.TELEGRAM_BOT_CHAT_ID }} >> .env
+          echo TELEGRAM_BOT_ACCESS_TOKEN=${{ secrets.TELEGRAM_BOT_ACCESS_TOKEN }} >> .env
           pytest . -v -s --alluredir=allure-results --disable-warnings
         continue-on-error: true
 
