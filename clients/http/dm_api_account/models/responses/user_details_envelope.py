@@ -3,7 +3,7 @@ from typing import Literal, Optional, Union
 
 from pydantic import BaseModel, ConfigDict, Field
 
-from dm_api_account.models.responses.general import Rating, UserRole
+from clients.http.dm_api_account.models.responses.general import Rating, UserRole
 
 BbParseMode = Literal["Common", "Info", "Post", "Chat"]
 

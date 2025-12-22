@@ -1,6 +1,6 @@
 service:
-  dm_api_account: "http://5.63.153.31:5051"
-  mailhog: "http://5.63.153.31:5025"
+  dm_api_account: "http://185.185.143.231:5051"
+  mailhog: "http://185.185.143.231:5025"
 
 user:
   login: "iponomarev_prod"

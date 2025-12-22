@@ -3,11 +3,13 @@ import time
 
 import allure
 
-from dm_api_account.models.requests.change_email import ChangeEmail
-from dm_api_account.models.requests.change_password import ChangePassword
-from dm_api_account.models.requests.login_credentials import LoginCredentials
-from dm_api_account.models.requests.registration import Registration
-from dm_api_account.models.requests.reset_password import ResetPassword
+from clients.http.dm_api_account.models.requests.change_email import ChangeEmail
+from clients.http.dm_api_account.models.requests.change_password import ChangePassword
+from clients.http.dm_api_account.models.requests.login_credentials import (
+    LoginCredentials,
+)
+from clients.http.dm_api_account.models.requests.registration import Registration
+from clients.http.dm_api_account.models.requests.reset_password import ResetPassword
 from services.api_mailhog_service import ApiMailhogService
 from services.dm_api_account_service import DmApiAccountService
 

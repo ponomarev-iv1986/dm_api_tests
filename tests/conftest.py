@@ -9,7 +9,7 @@ from swagger_coverage_py.reporter import CoverageReporter
 from vyper import v
 
 from helpers.account_helper import AccountHelper
-from restclient.configuration import Configuration
+from packages.restclient.configuration import Configuration
 from services.api_mailhog_service import ApiMailhogService
 from services.dm_api_account_service import DmApiAccountService
 
