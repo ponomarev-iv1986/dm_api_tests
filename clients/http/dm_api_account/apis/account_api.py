@@ -8,7 +8,7 @@ from clients.http.dm_api_account.models.responses.user_details_envelope import (
     UserDetailsEnvelope,
 )
 from clients.http.dm_api_account.models.responses.user_envelope import UserEnvelope
-from packages.restclient.client import RestClient
+from clients.http.rest_client import RestClient
 
 
 class AccountApi(RestClient):

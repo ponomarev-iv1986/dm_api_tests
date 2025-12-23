@@ -6,8 +6,8 @@ from requests import JSONDecodeError, Session
 from swagger_coverage_py.request_schema_handler import RequestSchemaHandler
 from swagger_coverage_py.uri import URI
 
-from packages.restclient.configuration import Configuration
-from packages.restclient.utils import allure_attach
+from clients.http.configuration import Configuration
+from clients.http.utils import allure_attach
 
 
 class RestClient:
